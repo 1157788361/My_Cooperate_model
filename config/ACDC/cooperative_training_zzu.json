@@ -1,0 +1,65 @@
+{   "name": "cooperative training",
+
+    "data": {
+      "dataset_name":"skull_data" ,
+      "root_dir": "/data/zzu_student/ljk633/Cooperative_Training/skull_data_example",
+      "frame": ["ES","ED"],
+      "image_size":[1024,1024,1],
+      "label_size":[1024,1024],
+      "pad_size":  [224,224,1],
+      "crop_size" :[512, 512,1],
+      "data_aug_policy" :"ACDC_affine_elastic_intensity",
+      "image_format_name": "{p_id}_img.nrrd",
+      "label_format_name": "{p_id}_seg.nrrd",
+      "num_classes": 2,
+      "use_cache": true,
+      "keep_orig_image_label_pair_for_training":false,
+      "myocardium_only": false,
+      "right_ventricle_only":false
+    },
+
+    "segmentation_model": {
+      "network_type": "FCN_16_standard",
+      "num_classes": 2,
+      "iter_n": 2
+  },
+
+  "learning":
+  { 
+    "latent_DA":true,
+    "separate_training":false,
+    "lr": 0.0001,
+    "n_epochs": 600, 
+    "max_iteration": 50000,
+    "batch_size":4,
+    "use_gpu": true
+  },
+
+  "latent_DA":
+  {
+    "mask_scope":["image code","shape code"],
+    "image code":
+    {   
+        "loss_name":"mse",
+        "mask_type":"random",
+        "max_threshold": 0.5,
+        "random_threshold":true,
+        "if_soft": true
+    },
+    "shape code":
+    {
+        "loss_name":"ce",
+        "mask_type":"random",
+        "max_threshold": 0.5,
+        "random_threshold":true,
+        "if_soft": true
+    }
+     
+  },
+
+    "output":
+    {
+      "save_epoch_every_num_epochs":10
+    }
+  }
+  
